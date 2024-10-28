@@ -1,11 +1,12 @@
 .home {
   height: 100vh;
   width: 100vw;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   display: flex;
   /* background: linear-gradient(178deg, #011225, #101010); */
   /* background-color: black; */
-  background: linear-gradient(to bottom right, #1b1c20, #232730);
+  /* background: linear-gradient(to bottom right, #1b1c20, #232730); */
+  background-color: black;
   justify-content: space-between;
   overflow: hidden;
 }
@@ -50,9 +51,10 @@ body {
 .left {
   height: 100%;
   width: 30%;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   overflow-y: scroll;
   scrollbar-width: none;
+  border-right: 1px solid white;
 }
 
 .left::-webkit-scrollbar {
@@ -73,13 +75,14 @@ body {
   border: 1px solid black;
   padding: 10px;
   margin: 0px 7px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   cursor: pointer;
+  color: white;
 }
 
 .singlechats:hover {
-  background-color: rgb(200, 199, 199);
+  background-color: rgb(49, 48, 48);
 }
 
 
@@ -94,19 +97,28 @@ body {
   width: 20vw;
 }
 
-
-
 /* right part css */
 .right {
   height: 100%;
   width: 70%;
-  border: 1px solid white;
 }
+
+.userGraduate {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+.userGraduate:hover {
+  border: 2px solid white;
+  border-radius: 50%; 
+  padding: 5px;
+}
+
 
 .righttop {
   width: 99%;
   height: 7%;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.15);
   margin: 7px auto;
   border-radius: 10px;
   display: flex;
@@ -114,6 +126,7 @@ body {
   align-items: center;
   flex-direction: row;
   padding: 10px;
+  color: white;
 }
 
 .rightcenter {
@@ -172,15 +185,23 @@ body {
 }
 
 .sendbar input {
-  width: 100%;
+  width: 92%;
   margin-left: 10px;
+  background-color: black;
+  color: white;
+  padding: 7px;
+  border-radius: 10px;
+  margin-top: 6px;
+  border: 1px solid rgb(76, 76, 76);
 }
+
 
 .sendbar {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   justify-content: center;
   align-items: center;
+  
 }
 
 .user {
@@ -188,6 +209,7 @@ body {
   justify-content: space-between;
   flex-direction: row-reverse;
   gap: 10px;
+  
 }
 
 .backicon {

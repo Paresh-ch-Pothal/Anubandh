@@ -102,7 +102,7 @@ const Home = () => {
                 },
             });
             const json = await response.json();
-            console.log(json);
+            // console.log(json);
             setprofile(json);
         } catch (error) {
             console.log(error);
@@ -124,7 +124,7 @@ const Home = () => {
                 },
             });
             const json = await response.json()
-            console.log(json);
+            // console.log(json);
             setuserchats(json);
         } catch (error) {
             console.log(error);
@@ -142,7 +142,7 @@ const Home = () => {
     }
 
     const handleclickchats = (e) => {
-        console.log(e)
+        // console.log(e)
         setchatId(e);
     }
 
@@ -155,8 +155,8 @@ const Home = () => {
                 },
             });
             const json = await response.json()
-            console.log(json);
-            console.log(json.participants);
+            // console.log(json);
+            // console.log(json.participants);
             setparticipants(json)
         } catch (error) {
             console.log(error);
@@ -180,7 +180,7 @@ const Home = () => {
                 }
             });
             const json = await response.json()
-            console.log(json.users)
+            // console.log(json.users)
             setusers(json.users);
         } catch (error) {
             console.log(error)
@@ -203,7 +203,7 @@ const Home = () => {
                 body: JSON.stringify({ userId: e })
             });
             const json = await response.json()
-            console.log(json);
+            // console.log(json);
             setTimeout(() => {
                 window.location.reload()
             }, 300);
@@ -227,7 +227,7 @@ const Home = () => {
 
             });
             const json = await response.json();
-            console.log(json)
+            // console.log(json)
             setmessages(json.messages)
             socket.emit("join chat", chatId);
         } catch (error) {
@@ -262,7 +262,7 @@ const Home = () => {
                     const result = await res.json();
                     imageUrl = result.secure_url;
 
-                    console.log("Uploaded Image URL:", imageUrl);
+                    // console.log("Uploaded Image URL:", imageUrl);
                 } catch (err) {
                     console.error("Image upload failed:", err);
                     return;
@@ -273,7 +273,7 @@ const Home = () => {
                 chatId: chatId,
                 image: imageUrl || null
             };
-            console.log(messageData)
+            // console.log(messageData)
 
             const response = await fetch(`${host}/message/sendmessage`, {
                 method: "POST",
@@ -284,7 +284,7 @@ const Home = () => {
                 body: JSON.stringify(messageData)
             });
             const json = await response.json();
-            console.log("Message sent:", json);
+            // console.log("Message sent:", json);
             setnewMessage("");
             setimage(null);
             setmessages(prevMessages => [...prevMessages, json.message]);
@@ -426,7 +426,7 @@ const Home = () => {
     };
 
     const handleDeleteMessage = async (messageId) => {
-        console.log(messageId)
+        // console.log(messageId)
         try {
             const response = await fetch(`${host}/message/deletemessage/${messageId}`, {
                 method: "DELETE",
@@ -436,7 +436,7 @@ const Home = () => {
                 },
             })
             const json = await response.json();
-            console.log(json)
+            // console.log(json)
             if (json.success) {
                 toast.success(json.message, {
                     position: "top-left",
@@ -479,7 +479,7 @@ const Home = () => {
     useEffect(() => {
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
-            console.log(windowWidth);
+            // console.log(windowWidth);
         };
 
         window.addEventListener('resize', handleResize);
@@ -509,7 +509,7 @@ const Home = () => {
 
 
     const handleRemoveFromGroup = async (e) => {
-        console.log(e);
+        // console.log(e);
         try {
             const response = await fetch(`${host}/chat/removefromgroup`, {
                 method: "PUT",
@@ -523,7 +523,7 @@ const Home = () => {
                 }),
             })
             const json = await response.json();
-            console.log(json);
+            // console.log(json);
             if (json.success) {
                 toast.success("User Removed Successfully", {
                     position: "top-left",
@@ -554,32 +554,38 @@ const Home = () => {
                 });
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 
-    const [personal,setpersonal]=useState(true)
-    const [batch,setbatch]=useState(false)
-    const [domain,setdomain]=useState(false)
+    const [personal, setpersonal] = useState(true)
+    const [batch, setbatch] = useState(false)
+    const [domain, setdomain] = useState(false)
+    const [isclick,setclick]=useState(false)
 
-    const handlePersonal=()=>{
+    const handlePersonal = () => {
         setpersonal(true)
         setbatch(false)
         setdomain(false)
-        console.log("personal")
+        // console.log("personal")
+        setclick(!isclick)
     }
-    const handleBatch=()=>{
+    const handleBatch = () => {
         setpersonal(false)
         setbatch(true)
         setdomain(false)
-        console.log("Batch")
+        // console.log("Batch")
+        setclick(!isclick)
     }
-    const handleDomain=()=>{
+    const handleDomain = () => {
         setpersonal(false)
         setbatch(false)
         setdomain(true)
-        console.log("Domain")
+        // console.log("Domain")
+        setclick(!isclick)
     }
+
+    
 
 
 
@@ -613,15 +619,15 @@ const Home = () => {
                                 Chat With Others
                             </button>
 
-                            <div className="offcanvas offcanvas-start" style={{ backgroundColor: "#2a2d33", color: "white", overflowY: "scroll" }} tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                            <div className="offcanvas offcanvas-start" style={{ backgroundColor: "black", color: "white", overflowY: "scroll" }} tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                                 <div className="offcanvas-header">
                                     <h5 className="offcanvas-title" id="offcanvasExampleLabel">All Users</h5>
                                     <button type="button" style={{ filter: "invert(100)" }} className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                 </div>
-                                <div className="offcanvas-body">
+                                <div className="offcanvas-body" style={{color: "white"}}>
                                     <div>
                                         <div style={{ display: "flex", gap: "10px" }}>
-                                            <input type="text" placeholder='Search User or Groups' className="form-control" aria-label="Dollar amount (with dot and two decimal places)" id='search' name='search' value={searchValue} onChange={searchOnchange} />
+                                            <input type="text" placeholder='Search User or Groups' className="form-control" aria-label="Dollar amount (with dot and two decimal places)" id='search' name='search' value={searchValue} onChange={searchOnchange} style={{backgroundColor: "black",color: "white",border: "1px solid rgb(76, 76, 76)"}} />
                                             <button type="button" className="btn btn-info" onClick={handleSearchuser}>Search</button>
                                         </div>
 
@@ -631,11 +637,11 @@ const Home = () => {
                                             ) : (
                                                 users.map((user) => {
                                                     return (
-                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3'>
+                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3' style={{color: "white"}}>
                                                             <img src={user.pic} height={50} width={50} alt="" />
                                                             <div style={{ color: "black" }} className='chatsdetails'>
-                                                                <span>{user.name}</span>
-                                                                <span>Batch: {user.batch}</span>
+                                                                <span style={{color: "white"}}>{user.name}</span>
+                                                                <span style={{color: "white"}}>Batch: {user.batch}</span>
                                                             </div>
                                                         </div>
                                                     )
@@ -647,11 +653,11 @@ const Home = () => {
                                             ) : (
                                                 searchusers.map((user) => {
                                                     return (
-                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3'>
+                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3' style={{color: "white"}}>
                                                             <img src={user.pic} height={50} width={50} alt="" />
                                                             <div style={{ color: "black" }} className='chatsdetails'>
-                                                                <span>{user.name}</span>
-                                                                <span>Batch: {user.batch}</span>
+                                                                <span style={{color: "white"}}>{user.name}</span>
+                                                                <span style={{color: "white"}}>Batch: {user.batch}</span>
                                                             </div>
                                                         </div>
                                                     )
@@ -672,66 +678,204 @@ const Home = () => {
                     </div>
                     <div className='chats'>
                         <ul className="nav justify-content-center">
-                            <li onClick={handlePersonal} style={{backgroundColor: "black",borderRadius: "10px",cursor: "pointer"}}  className="nav-item mx-2">
-                                <a style={{color: "white"}} className="nav-link active" aria-current="page">Personal</a>
+                            <li onClick={handlePersonal} style={{ backgroundColor: personal ? "#222324" : "white", borderRadius: "10px", cursor: "pointer" }} className="nav-item mx-2">
+                                <a style={{ color: personal ? "white" : "black" }} className="nav-link active" aria-current="page">Personal</a>
                             </li>
-                            <li onClick={handleBatch} style={{backgroundColor: "black",borderRadius: "10px",cursor: "pointer"}} className="nav-item mx-2">
-                                <a style={{color: "white"}} className="nav-link">Batch Group</a>
+                            <li onClick={handleBatch} style={{ backgroundColor: batch ? "#222324" : "white", borderRadius: "10px", cursor: "pointer" }} className="nav-item mx-2">
+                                <a style={{ color: batch ? "white" : "black" }} className="nav-link">Batch Group</a>
                             </li>
-                            <li onClick={handleDomain} style={{backgroundColor: "black",borderRadius: "10px",cursor: "pointer"}} className="nav-item mx-2">
-                                <a style={{color: "white"}} className="nav-link">Domain Group</a>
+                            <li onClick={handleDomain} style={{ backgroundColor: domain ? "#222324" : "white", borderRadius: "10px", cursor: "pointer" }} className="nav-item mx-2">
+                                <a style={{ color: domain ? "white" : "black" }} className="nav-link">Domain Group</a>
                             </li>
                         </ul>
                         {userchats.length === 0 ? (<div style={{ color: "white", textAlign: "center" }}>No Chats is present</div>) : (
                             userchats.map((userchat) => {
                                 return (
-                                    <div onClick={() => { handleclickchats(userchat._id) }} key={userchat._id} className='singlechats'>
-                                        <img
-                                            src={
-                                                userchat.IsDomainSpecific
-                                                    ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0hmziKrZ_PcL3b_g16f_SwnXXRLpFD3ZgvQ&s" // Domain-specific chat image
-                                                    : userchat.isBatchChat
-                                                        ? "https://allpngfree.com/apf-prod-storage-api/storage/thumbnails/batch-png-images-thumbnail-1643730708.jpg" // Batch-specific chat image
-                                                        : userchat.participants[0]._id === profile._id
-                                                            ? userchat.participants[1].pic  // Show the second participant's pic if the first one is the logged-in user
-                                                            : userchat.participants[0].pic  // Otherwise, show the first participant's pic
-                                            }
-                                            height={50}
-                                            width={50}
-                                            alt="chat image"
-                                        />
-                                        <div className='chatsdetails'>
-                                            <span>
-                                                {userchat.name === "sender"
-                                                    ? userchat.participants[0]._id === profile._id
-                                                        ? userchat.participants[1].name
-                                                        : userchat.participants[0].name
-                                                    : userchat.name
+                                    <>
+                                        {/* // for Batch chats start */}
+                                        {userchat.isBatchChat && (
+                                            <div key={userchat._id}>
+                                                {batch && (
+                                                    <div onClick={() => { handleclickchats(userchat._id) }} key={userchat._id} className='singlechats'>
+                                                        <img
+                                                            src={"https://allpngfree.com/apf-prod-storage-api/storage/thumbnails/batch-png-images-thumbnail-1643730708.jpg"
+                                                            }
+                                                            height={50}
+                                                            width={50}
+                                                            alt="chat image"
+                                                        />
+                                                        <div className='chatsdetails'>
+                                                            {userchat.isBatchChat && (<span>
+                                                                {userchat.name}</span>)
+                                                            }
+                                                            {userchat.latestMessage ? (
+                                                                userchat.latestMessage.content ? (
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span>
+                                                                            {userchat.latestMessage.content.length > 20
+                                                                                ? userchat.latestMessage.content.slice(0, 20) + '...'
+                                                                                : userchat.latestMessage.content}
+                                                                        </span>
+                                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                                                    </div>
+                                                                ) : userchat.latestMessage.image ? (
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span>Image</span>
+                                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span>No New Message</span>
+                                                                )
+                                                            ) : (
+                                                                <span>No New Message</span>
+                                                            )}
+                                                        </div>
+                                                    </div>)
                                                 }
-                                            </span>
-                                            {userchat.latestMessage ? (
-                                                userchat.latestMessage.content ? (
-                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <span>
-                                                            {userchat.latestMessage.content.length > 20
-                                                                ? userchat.latestMessage.content.slice(0, 20) + '...'
-                                                                : userchat.latestMessage.content}
-                                                        </span>
-                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
-                                                    </div>
-                                                ) : userchat.latestMessage.image ? (
-                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <span>Image</span>
-                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
-                                                    </div>
-                                                ) : (
-                                                    <span>No New Message</span>
-                                                )
-                                            ) : (
-                                                <span>No New Message</span>
-                                            )}
-                                        </div>
-                                    </div>
+                                            </div>)}
+                                        {/* // end */}
+
+                                        {/* // for domain chats start */}
+                                        {userchat.IsDomainSpecific && (
+                                            <div key={userchat._id} >
+                                                {domain && (
+                                                    <div onClick={() => { handleclickchats(userchat._id) }} key={userchat._id} className='singlechats'>
+                                                        <img
+                                                            src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0hmziKrZ_PcL3b_g16f_SwnXXRLpFD3ZgvQ&s"
+                                                            }
+                                                            height={50}
+                                                            width={50}
+                                                            alt="chat image"
+                                                        />
+                                                        <div className='chatsdetails'>
+                                                            <span>
+                                                                {userchat.IsDomainSpecific && (
+                                                                    userchat.name)
+                                                                }
+                                                            </span>
+                                                            {userchat.latestMessage ? (
+                                                                userchat.latestMessage.content ? (
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span>
+                                                                            {userchat.latestMessage.content.length > 20
+                                                                                ? userchat.latestMessage.content.slice(0, 20) + '...'
+                                                                                : userchat.latestMessage.content}
+                                                                        </span>
+                                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                                                    </div>
+                                                                ) : userchat.latestMessage.image ? (
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span>Image</span>
+                                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span>No New Message</span>
+                                                                )
+                                                            ) : (
+                                                                <span>No New Message</span>
+                                                            )}
+                                                        </div>
+                                                    </div>)
+                                                }
+                                            </div>)}
+                                        {/* // end */}
+
+                                        {/* for personal chats */}
+                                        {userchat.name === "sender" && (
+                                            <div key={userchat._id}>
+                                                {personal && (
+                                                    <div onClick={() => { handleclickchats(userchat._id) }} key={userchat._id} className='singlechats'>
+                                                        <img
+                                                            src={userchat.participants[0]._id === profile._id
+                                                                                         ? userchat.participants[1].pic  
+                                                                                        : userchat.participants[0].pic}
+                                                            height={50}
+                                                            width={50}
+                                                            alt="chat image"
+                                                        />
+                                                        <div className='chatsdetails'>
+                                                            <span>
+                                                                {userchat.name === "sender"
+                                                                    ? userchat.participants[0]._id === profile._id
+                                                                        ? userchat.participants[1].name
+                                                                        : userchat.participants[0].name : "No"
+                                                                }
+                                                            </span>
+                                                            {userchat.latestMessage ? (
+                                                                userchat.latestMessage.content ? (
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span>
+                                                                            {userchat.latestMessage.content.length > 20
+                                                                                ? userchat.latestMessage.content.slice(0, 20) + '...'
+                                                                                : userchat.latestMessage.content}
+                                                                        </span>
+                                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                                                    </div>
+                                                                ) : userchat.latestMessage.image ? (
+                                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                        <span>Image</span>
+                                                                        <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <span>No New Message</span>
+                                                                )
+                                                            ) : (
+                                                                <span>No New Message</span>
+                                                            )}
+                                                        </div>
+                                                    </div>)
+                                                }
+                                            </div>)}
+                                        {/* end */}
+
+                                    </>
+                                    // <div onClick={() => { handleclickchats(userchat._id) }} key={userchat._id} className='singlechats'>
+                                    //     <img
+                                    //         src={
+                                    //             userchat.IsDomainSpecific
+                                    //                 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0hmziKrZ_PcL3b_g16f_SwnXXRLpFD3ZgvQ&s" // Domain-specific chat image
+                                    //                 : userchat.isBatchChat
+                                    //                     ? "https://allpngfree.com/apf-prod-storage-api/storage/thumbnails/batch-png-images-thumbnail-1643730708.jpg" // Batch-specific chat image
+                                    //                     : userchat.participants[0]._id === profile._id
+                                    //                         ? userchat.participants[1].pic  // Show the second participant's pic if the first one is the logged-in user
+                                    //                         : userchat.participants[0].pic  // Otherwise, show the first participant's pic
+                                    //         }
+                                    //         height={50}
+                                    //         width={50}
+                                    //         alt="chat image"
+                                    //     />
+                                    //     <div className='chatsdetails'>
+                                    //         <span>
+                                    //             {userchat.name === "sender"
+                                    //                 ? userchat.participants[0]._id === profile._id
+                                    //                     ? userchat.participants[1].name
+                                    //                     : userchat.participants[0].name
+                                    //                 : userchat.name
+                                    //             }
+                                    //         </span>
+                                    //         {userchat.latestMessage ? (
+                                    //             userchat.latestMessage.content ? (
+                                    //                 <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    //                     <span>
+                                    //                         {userchat.latestMessage.content.length > 20
+                                    //                             ? userchat.latestMessage.content.slice(0, 20) + '...'
+                                    //                             : userchat.latestMessage.content}
+                                    //                     </span>
+                                    //                     <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                    //                 </div>
+                                    //             ) : userchat.latestMessage.image ? (
+                                    //                 <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    //                     <span>Image</span>
+                                    //                     <span>{timeFromCreatedAt(userchat.latestMessage.createdAt)}</span>
+                                    //                 </div>
+                                    //             ) : (
+                                    //                 <span>No New Message</span>
+                                    //             )
+                                    //         ) : (
+                                    //             <span>No New Message</span>
+                                    //         )}
+                                    //     </div>
+                                    // </div>
                                 )
                             })
                         )}
@@ -742,7 +886,7 @@ const Home = () => {
                 <div className='right'>
                     <div className='righttop'>
                         <div className='user'>
-                            <FaUserGraduate data-bs-toggle="modal" data-bs-target="#staticBackdrop" size={25} style={{ cursor: "pointer" }} />
+                            <FaUserGraduate data-bs-toggle="modal" data-bs-target="#staticBackdrop" className='userGraduate' size={25} style={{ cursor: "pointer" }} />
 
                             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div className="modal-dialog">
@@ -778,7 +922,8 @@ const Home = () => {
                             </div>
 
 
-                            <MdKeyboardBackspace onClick={handleClickBackIcon} className='backicon' size={25} style={{ cursor: "pointer" }} /></div>
+                            <MdKeyboardBackspace onClick={handleClickBackIcon} className='backicon' size={25} style={{ cursor: "pointer" }} />
+                        </div>
                         <div>
                             {participants.IsDomainSpecific ? (
                                 <h5>Domain: {participants.name}</h5>
@@ -859,7 +1004,7 @@ const Home = () => {
                     </div>
                     <div className='rightbottom'>
                         <div className="sendbar">
-                            <input type="text" id='newMessage' name='newMessage' value={newMessage} onChange={(e) => { setnewMessage(e.target.value) }} placeholder='Message' className="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
+                            <input type="text" id='newMessage' name='newMessage' value={newMessage} onChange={(e) => { setnewMessage(e.target.value) }} placeholder='Message'  aria-label="Dollar amount (with dot and two decimal places)" />
                             <input
                                 onChange={handleFileChange}
                                 type="file"
@@ -867,7 +1012,7 @@ const Home = () => {
                                 style={{ display: 'none' }}
                             />
                             <FaFileImage onClick={() => sendimagefile.current.click()} size={25} color='#92ce92' style={{ cursor: "pointer" }} />
-                            <IoSend onClick={handleSendMessage} style={{ cursor: "pointer" }} className='sendbutton' color='#e50a82' size={25} />
+                            <IoSend onClick={handleSendMessage} style={{ cursor: "pointer" }} className='sendbutton' color='#9abee4' size={25} />
                         </div>
                     </div>
                 </div>

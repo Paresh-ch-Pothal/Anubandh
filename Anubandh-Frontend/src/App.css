@@ -1,3 +1,7 @@
 *{
     background-color: aqua;
 }
+
+body ::-webkit-scrollbar{
+    display: none;
+}
