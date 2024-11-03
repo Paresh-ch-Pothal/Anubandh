@@ -688,7 +688,7 @@ const Home = () => {
                                 <a style={{ color: domain ? "white" : "black" }} className="nav-link">Domain Group</a>
                             </li>
                         </ul>
-                        {userchats.length === 0 ? (<div style={{ color: "white", textAlign: "center" }}>No Chats is present</div>) : (
+                        {userchats.length === 0 ? (<div style={{ color: "white", textAlign: "center" }}>No Chat is present</div>) : (
                             userchats.map((userchat) => {
                                 return (
                                     <>
@@ -890,12 +890,12 @@ const Home = () => {
 
                             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div className="modal-dialog">
-                                    <div style={{ backgroundColor: "white", color: "black" }} className="modal-content">
+                                    <div style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", color: "white",marginTop: "100px" }} className="modal-content">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="staticBackdropLabel">Participants</h1>
-                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" style={{filter: "invert()"}} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div className="modal-body">
+                                        <div className="modal-body" style={{backgroundColor: "rgba(255, 255, 255, 0.1)"}}>
                                             {participants.length === 0 ? (
                                                 <div>No Users are present</div>
                                             ) : (participants.participants.map((user) => {
