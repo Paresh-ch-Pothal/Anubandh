@@ -102,7 +102,7 @@ const Home = () => {
                 },
             });
             const json = await response.json();
-            // console.log(json);
+            console.log(json);
             setprofile(json);
         } catch (error) {
             console.log(error);
@@ -124,7 +124,7 @@ const Home = () => {
                 },
             });
             const json = await response.json()
-            // console.log(json);
+            console.log(json);
             setuserchats(json);
         } catch (error) {
             console.log(error);
@@ -561,7 +561,7 @@ const Home = () => {
     const [personal, setpersonal] = useState(true)
     const [batch, setbatch] = useState(false)
     const [domain, setdomain] = useState(false)
-    const [isclick,setclick]=useState(false)
+    const [isclick, setclick] = useState(false)
 
     const handlePersonal = () => {
         setpersonal(true)
@@ -585,7 +585,21 @@ const Home = () => {
         setclick(!isclick)
     }
 
-    
+    const updateStudentDatabase = async () => {
+        const response = await fetch(`${host}/college/updateTheStudentDatabase`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "auth-token": token
+            },
+        })
+        const data = await response.json();
+        console.log(data);
+    }
+
+    useEffect(() => {
+        updateStudentDatabase();
+    }, [token]);
 
 
 
@@ -624,10 +638,10 @@ const Home = () => {
                                     <h5 className="offcanvas-title" id="offcanvasExampleLabel">All Users</h5>
                                     <button type="button" style={{ filter: "invert(100)" }} className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                 </div>
-                                <div className="offcanvas-body" style={{color: "white"}}>
+                                <div className="offcanvas-body" style={{ color: "white" }}>
                                     <div>
                                         <div style={{ display: "flex", gap: "10px" }}>
-                                            <input type="text" placeholder='Search User or Groups' className="form-control" aria-label="Dollar amount (with dot and two decimal places)" id='search' name='search' value={searchValue} onChange={searchOnchange} style={{backgroundColor: "black",color: "white",border: "1px solid rgb(76, 76, 76)"}} />
+                                            <input type="text" placeholder='Search User or Groups' className="form-control" aria-label="Dollar amount (with dot and two decimal places)" id='search' name='search' value={searchValue} onChange={searchOnchange} style={{ backgroundColor: "black", color: "white", border: "1px solid rgb(76, 76, 76)" }} />
                                             <button type="button" className="btn btn-info" onClick={handleSearchuser}>Search</button>
                                         </div>
 
@@ -637,11 +651,11 @@ const Home = () => {
                                             ) : (
                                                 users.map((user) => {
                                                     return (
-                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3' style={{color: "white"}}>
-                                                            <img src={user.pic} height={50} width={50} alt="" />
+                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3' style={{ color: "white" }}>
+                                                            <img src={user.pic ? user.pic : "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/man-user-circle-icon.png"} height={50} width={50} alt="" />
                                                             <div style={{ color: "black" }} className='chatsdetails'>
-                                                                <span style={{color: "white"}}>{user.name}</span>
-                                                                <span style={{color: "white"}}>Batch: {user.batch}</span>
+                                                                <span style={{ color: "white" }}>{user.name}</span>
+                                                                <span style={{ color: "white" }}>Batch: {user.batch}</span>
                                                             </div>
                                                         </div>
                                                     )
@@ -653,11 +667,11 @@ const Home = () => {
                                             ) : (
                                                 searchusers.map((user) => {
                                                     return (
-                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3' style={{color: "white"}}>
+                                                        <div onClick={() => handleSingleChats(user._id)} key={user._id} className='singlechats my-3' style={{ color: "white" }}>
                                                             <img src={user.pic} height={50} width={50} alt="" />
                                                             <div style={{ color: "black" }} className='chatsdetails'>
-                                                                <span style={{color: "white"}}>{user.name}</span>
-                                                                <span style={{color: "white"}}>Batch: {user.batch}</span>
+                                                                <span style={{ color: "white" }}>{user.name}</span>
+                                                                <span style={{ color: "white" }}>Batch: {user.batch}</span>
                                                             </div>
                                                         </div>
                                                     )
@@ -786,9 +800,12 @@ const Home = () => {
                                                 {personal && (
                                                     <div onClick={() => { handleclickchats(userchat._id) }} key={userchat._id} className='singlechats'>
                                                         <img
-                                                            src={userchat.participants[0]._id === profile._id
-                                                                                         ? userchat.participants[1].pic  
-                                                                                        : userchat.participants[0].pic}
+                                                            src={
+                                                                userchat.participants[0]._id === profile._id
+                                                                    ? userchat.participants[1]?.pic || "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/man-user-circle-icon.png"
+                                                                    : userchat.participants[0]?.pic || "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/man-user-circle-icon.png"
+                                                            }
+
                                                             height={50}
                                                             width={50}
                                                             alt="chat image"
@@ -797,8 +814,8 @@ const Home = () => {
                                                             <span>
                                                                 {userchat.name === "sender"
                                                                     ? userchat.participants[0]._id === profile._id
-                                                                        ? userchat.participants[1].name
-                                                                        : userchat.participants[0].name : "No"
+                                                                        ? userchat.participants[1]?.name || "Unknown"
+                                                                        : userchat.participants[0]?.name || "unKnown" : "No"
                                                                 }
                                                             </span>
                                                             {userchat.latestMessage ? (
@@ -890,12 +907,12 @@ const Home = () => {
 
                             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div className="modal-dialog">
-                                    <div style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", color: "white",marginTop: "100px" }} className="modal-content">
+                                    <div style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", color: "white", marginTop: "100px" }} className="modal-content">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="staticBackdropLabel">Participants</h1>
-                                            <button type="button" style={{filter: "invert()"}} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" style={{ filter: "invert()" }} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div className="modal-body" style={{backgroundColor: "rgba(255, 255, 255, 0.1)"}}>
+                                        <div className="modal-body" style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}>
                                             {participants.length === 0 ? (
                                                 <div>No Users are present</div>
                                             ) : (participants.participants.map((user) => {
@@ -933,7 +950,7 @@ const Home = () => {
                                 <h5>
                                     {participants.name === "sender"
                                         ? participants.participants[0]._id === profile._id
-                                            ? participants.participants[1].name
+                                            ? participants.participants[1]?.name || "unknown"
                                             : participants.participants[0].name
                                         : participants.name}
                                 </h5>
@@ -976,7 +993,7 @@ const Home = () => {
                                         </div>
                                     ) : (
                                         <div style={{ display: "flex", gap: "7px", justifyContent: "center", alignItems: "center" }}>
-                                            <img src={msg.sender.pic} alt={msg.sender.name} height={30} width={30} />
+                                            <img src={msg.sender.pic ? msg.sender.pic : "https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/man-user-circle-icon.png"} alt={msg.sender.name} height={30} width={30} />
                                             <span>{msg.sender.name}</span> :
                                             <span>{msg.content}</span>
                                             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -1004,7 +1021,7 @@ const Home = () => {
                     </div>
                     <div className='rightbottom'>
                         <div className="sendbar">
-                            <input type="text" id='newMessage' name='newMessage' value={newMessage} onChange={(e) => { setnewMessage(e.target.value) }} placeholder='Message'  aria-label="Dollar amount (with dot and two decimal places)" />
+                            <input type="text" id='newMessage' name='newMessage' value={newMessage} onChange={(e) => { setnewMessage(e.target.value) }} placeholder='Message' aria-label="Dollar amount (with dot and two decimal places)" />
                             <input
                                 onChange={handleFileChange}
                                 type="file"

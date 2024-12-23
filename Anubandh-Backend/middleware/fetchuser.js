@@ -8,6 +8,7 @@ const fetchuser=(req,res,next)=>{
     }
     try {
         const data=JWT.verify(token,JWT_SECRET);
+        console.log(data.user._id);
         req.user=data.user;
         next();
     } catch (error) {

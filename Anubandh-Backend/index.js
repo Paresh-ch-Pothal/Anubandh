@@ -6,6 +6,7 @@ const app = express()
 const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat")
 const messageRoutes = require('./routes/message')
+const collegeRoutes=require("./routes/college");
 const bodyParser = require("body-parser");
 app.use(cors());
 app.use(express.json());
@@ -16,6 +17,7 @@ ConnectToMOngoDB();
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
+app.use("/college", collegeRoutes);
 
 const server = app.listen(PORT, () => {
     console.log("Server is running on port 5000");
