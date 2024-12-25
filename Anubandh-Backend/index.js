@@ -7,6 +7,7 @@ const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat")
 const messageRoutes = require('./routes/message')
 const collegeRoutes=require("./routes/college");
+const feedRoutes=require("./routes/feed");
 const bodyParser = require("body-parser");
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
 app.use("/college", collegeRoutes);
+app.use("/feed", feedRoutes);
 
 const server = app.listen(PORT, () => {
     console.log("Server is running on port 5000");

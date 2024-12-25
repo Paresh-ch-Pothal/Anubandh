@@ -30,7 +30,8 @@ router.put("/updateTheStudentDatabase", fetchuser, async (req, res) => {
         return res.status(200).json({ success: true, college });
 
     } catch (error) {
-
+        console.log(error)
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 })
 
@@ -42,7 +43,8 @@ router.put("/addStudentToAuthenticate", async (req, res) => {
         await college.save();
         return res.status(200).json({success:true,college});
     } catch (error) {
-        
+        console.log(error)
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 })
 
