@@ -15,7 +15,7 @@ router.post("/sendmessage", fetchuser, async (req, res) => {
         return res.status(200).json({ success: false, message: "Please provide all the parameters" })
     }
     var newMessage = {
-        sender: req.user._id,
+        sender: req.user.id,
         content: content || "",
         chatId: chatId,
         image: image || null,
@@ -53,7 +53,7 @@ router.get("/fetchmessage/:id", fetchuser, async (req, res) => {
 
 //... delete message by id ...//
 router.delete("/deletemessage/:id", fetchuser, async (req, res) => {
-    const userId = req.user._id;
+    const userId = req.user.id;
     const messageId = req.params.id;
 
     if (!messageId) {
@@ -99,7 +99,7 @@ router.delete("/deletemessage/:id", fetchuser, async (req, res) => {
 //.. edit a particular message ..//
 router.put("/editmessage/:id", fetchuser, async (req, res) => {
     const { content } = req.body;
-    const userId = req.user._id;
+    const userId = req.user.id;
     const messageId = req.params.id;
     if (!messageId) {
         return res.status(200).send("MessageId is not given");

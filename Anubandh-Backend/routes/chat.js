@@ -4,6 +4,7 @@ const Message = require("../models/message");
 const Chat = require("../models/chat");
 const fetchuser = require("../middleware/fetchuser");
 const College = require("../models/college");
+const fetchcollege = require("../middleware/fetchcollege");
 const app = express();
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.post("/singlechat", fetchuser, async (req, res) => {
         IsDomainSpecific: false,
         isBatchChat: false,
         $and: [
-            { participants: { $in: [req.user._id] } },
+            { participants: { $in: [req.user.id] } },
             { participants: { $in: [userId] } },
         ],
     }).populate("participants", "-password")
@@ -36,7 +37,7 @@ router.post("/singlechat", fetchuser, async (req, res) => {
             name: "sender",
             IsDomainSpecific: false,
             isBatchChat: false,
-            participants: [req.user._id, userId],
+            participants: [req.user.id, userId],
             latestMessage: null
         };
 
@@ -54,20 +55,36 @@ router.post("/singlechat", fetchuser, async (req, res) => {
 
 
 //...fetching chats of a particular user...//
-router.get("/fetchchats", fetchuser, async (req, res) => {
+router.get("/fetchchats", fetchuser, fetchcollege, async (req, res) => {
     try {
-        let chats = await Chat.find({
-            participants: { $in: [req.user._id] }
-        })
-            .populate("participants", "-password")
-            .populate("groupAdmin", "-password")
-            .populate("latestMessage")
-            .sort({ updatedAt: -1 });
-        chats = await User.populate(chats, {
-            path: "latestMessage.sender",
-            select: "name pic email",
-        });
-        res.status(200).send(chats);
+        if (req.user.type === "college") {
+            let chats = await Chat.find({
+                participants: { $in: [req.user.id] }
+            })
+                .populate("participants", "-password")
+                .populate("groupAdmin", "-password")
+                .populate("latestMessage")
+                .sort({ updatedAt: -1 });
+            chats = await User.populate(chats, {
+                path: "latestMessage.sender",
+                select: "name pic email",
+            });
+            res.status(200).send(chats);
+        }
+        if (req.user.type === "alumni") {
+            let chats = await Chat.find({
+                participants: { $in: [req.user.id] }
+            })
+                .populate("participants", "-password")
+                .populate("groupAdmin", "-password")
+                .populate("latestMessage")
+                .sort({ updatedAt: -1 });
+            chats = await User.populate(chats, {
+                path: "latestMessage.sender",
+                select: "name pic email",
+            });
+            res.status(200).send(chats);
+        }
     } catch (error) {
         console.log(error);
         return res.status(500).send("Some error has occurred");
@@ -134,9 +151,11 @@ router.get("/fetchchats", fetchuser, async (req, res) => {
 
 // })
 
-router.post("/groupchatbaseddomain",fetchuser ,async (req, res) => {
+router.post("/groupchatbaseddomain", fetchuser, async (req, res) => {
     const { domains } = req.body;
-    const collegeId=req.user.collegeId;
+    const userId=req.user.id
+    const user=await User.findById(userId);
+    const collegeId=user.college
 
     if (!domains || !domains.length || !collegeId) {
         return res.status(400).send({ success: false, message: "Please provide all the details" });
@@ -266,9 +285,11 @@ router.post("/groupchatbaseddomain",fetchuser ,async (req, res) => {
 
 // })
 
-router.post("/groupchatbasedbatch",fetchuser, async (req, res) => {
-    const {batches } = req.body; // College ID provided in the request body
-    const collegeId=req.user.collegeId
+router.post("/groupchatbasedbatch", fetchuser, fetchcollege, async (req, res) => {
+    const { batches } = req.body; // College ID provided in the request body
+    const userId=req.user.id
+    const user=await User.findById(userId);
+    const collegeId=user.college
 
     if (!collegeId) {
         return res.status(400).send({ success: false, message: "Please provide a college ID" });
@@ -340,14 +361,17 @@ router.post("/groupchatbasedbatch",fetchuser, async (req, res) => {
 
 
 //...remove participants from the group...//
-router.put("/removefromgroup", fetchuser, async (req, res) => {
+router.put("/removefromgroup", fetchcollege, async (req, res) => {
     const { chatId, userId } = req.body;
+    const userId1=req.user.id
+    const user=await User.findById(userId1);
+    const collegeId=user.college
     try {
         let chat = await Chat.findById(chatId).populate("groupAdmin", "-password");
         if (!chat) {
             return res.status(200).send({ success: false, message: "Chat is not found" });
         }
-        if (chat.groupAdmin._id.toString() !== req.user._id.toString()) {
+        if (chat.groupAdmin._id.toString() !== collegeId.toString()) {
             return res.status(403).send({ success: false, message: "Unauthorized" })
         }
         const removed = await Chat.findByIdAndUpdate(chatId, {
@@ -371,7 +395,7 @@ router.put("/removefromgroup", fetchuser, async (req, res) => {
 router.get("/fetchparticipants/:chatId", async (req, res) => {
     try {
         const chatId = req.params.chatId;
-        const participants = await Chat.findById(chatId).populate("participants");
+        const participants = await Chat.findById(chatId).populate("participants name");
         return res.status(200).json(participants);
     } catch (error) {
         console.log(error)
@@ -383,7 +407,7 @@ router.get("/fetchparticipants/:chatId", async (req, res) => {
 //... delete a particular chat by its chatId
 router.delete("/deletechat/:chatId", fetchuser, async (req, res) => {
     const chatId = req.params.chatId;
-    const userId = req.user._id;
+    const userId = req.user.id;
     try {
         const chat = await Chat.findById(chatId);
         if (!chat) {

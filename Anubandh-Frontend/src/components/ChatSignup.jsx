@@ -326,21 +326,7 @@ const SignUp = () => {
         GetAllRegisteredColleges();
     })
 
-    const updateStudentDatabase = async () => {
-        const response = await fetch(`${host}/user/updateStudentDatabase`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "auth-token": localStorage.getItem("token")
-            },
-        })
-        const data=await response.json();
-        console.log(data);
-    }
-
-    useEffect(()=>{
-        updateStudentDatabase();
-    },[localStorage.getItem("token")]);
+    
 
     return (
         <div className="signup-container">

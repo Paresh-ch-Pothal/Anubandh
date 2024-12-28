@@ -8,6 +8,7 @@ const chatRoutes = require("./routes/chat")
 const messageRoutes = require('./routes/message')
 const collegeRoutes=require("./routes/college");
 const feedRoutes=require("./routes/feed");
+// const 
 const bodyParser = require("body-parser");
 app.use(cors());
 app.use(express.json());

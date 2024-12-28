@@ -15,15 +15,15 @@ router.get("/allRegisteredColleges", async (req, res) => {
 
 router.put("/updateTheStudentDatabase", fetchuser, async (req, res) => {
     try {
-        const collegeId = req.user.collegeId;
-        const college = await College.findById(collegeId);
-        const userId = req.user._id;
+        const userId = req.user.id
         const user = await User.findById(userId);
+        const collegeId = user.college
+        const college = await College.findById(collegeId);
         const isUserAlreadyAdded = college.studentDatabase.some(
             (entry) => entry.student.toString() === userId.toString()
         );
         if (isUserAlreadyAdded) {
-            return res.status(400).json({ success: false, message: "User is already in the student database" });
+            return res.status(200).json({ success: false, message: "User is already in the student database" });
         }
         college.studentDatabase.push({ student: userId });
         await college.save();
@@ -37,11 +37,11 @@ router.put("/updateTheStudentDatabase", fetchuser, async (req, res) => {
 
 router.put("/addStudentToAuthenticate", async (req, res) => {
     try {
-        const {email,collegeId}=req.body;
-        const college=await College.findById(collegeId);
-        college.studentAutheticate.push({email:email});
+        const { email, collegeId } = req.body;
+        const college = await College.findById(collegeId);
+        college.studentAutheticate.push({ email: email });
         await college.save();
-        return res.status(200).json({success:true,college});
+        return res.status(200).json({ success: true, college });
     } catch (error) {
         console.log(error)
         return res.status(500).json({ success: false, message: "Internal Server Error" });

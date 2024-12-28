@@ -13,9 +13,14 @@ const FeedSchema = new mongoose.Schema({
         type: String
     },
     postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Reference to User model
-        required: true
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+        college: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "College"
+        }
     },
     category: {
         type: String // news, achievement, update
@@ -23,21 +28,39 @@ const FeedSchema = new mongoose.Schema({
     college: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "College",
-        required: true
     },
-    likes:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
-    comments:[
-        {
-            user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-            text:{type: String, required: true},
-            createdAt: {type: Date, default: Date.now}
-        }
-    ],
-    
-},{
+    likes: {
+        users: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        colleges: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "College",
+            },
+        ],
+    },
+    comments: {
+        userComments: [
+            {
+                user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+                text: { type: String, required: true },
+                createdAt: { type: Date, default: Date.now },
+            },
+        ],
+        collegeComments: [
+            {
+                college: { type: mongoose.Schema.Types.ObjectId, ref: "College" },
+                text: { type: String, required: true },
+                createdAt: { type: Date, default: Date.now },
+            },
+        ],
+    },
+
+}, {
     timestamps: true
 });
 

@@ -146,6 +146,8 @@ const Home = () => {
         setchatId(e);
     }
 
+    const [remove,setremove]=useState("")
+
     const fetchparticipants = async (chatId) => {
         try {
             const response = await fetch(`${host}/chat/fetchparticipants/${chatId}`, {
@@ -155,7 +157,8 @@ const Home = () => {
                 },
             });
             const json = await response.json()
-            // console.log(json);
+            console.log(json.name);
+            setremove(json.name)
             // console.log(json.participants);
             setparticipants(json)
         } catch (error) {
@@ -923,7 +926,8 @@ const Home = () => {
                                                             {user.name === profile.name ? (<span>You</span>) : (<span>{user.name}</span>)}
                                                             <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                                 <span>Batch: {user.batch}</span>
-                                                                <IoIosRemoveCircleOutline size={20} onClick={() => { handleRemoveFromGroup(user._id) }} />
+                                                                {remove !== "sender" &&
+                                                                <IoIosRemoveCircleOutline size={20} onClick={() => { handleRemoveFromGroup(user._id) }} /> }
                                                             </div>
                                                         </div>
                                                     </div>

@@ -42,7 +42,7 @@ const JWT_SECRET = "^@12@34#%^&8@1%6$5^&#1234";
 //...FetchAllUser...//
 router.get("/fetchalluser", fetchuser, async (req, res) => {
     try {
-        const userId = req.user._id;
+        const userId = req.user.id;
         const users = await User.find({ _id: { $ne: userId } }).select("-password");
         return res.status(200).json({ success: true, users })
     } catch (error) {
@@ -54,7 +54,7 @@ router.get("/fetchalluser", fetchuser, async (req, res) => {
 //...searchUser...//
 router.get("/searchuser", fetchuser, async (req, res) => {
     const search = req.query.search;
-    const userId = req.user._id
+    const userId = req.user.id
     try {
         if (!search) {
             return res.status(200).json({ success: true, message: "No Search item is present" });
@@ -120,7 +120,7 @@ router.get("/getuser/:id", async (req, res) => {
 //...profile...//
 router.get("/profile", fetchuser, async (req, res) => {
     try {
-        const userId = req.user._id;
+        const userId = req.user.id;
         const user = await User.findById(userId);
         return res.status(200).json(user)
     } catch (error) {
@@ -448,9 +448,10 @@ router.post("/signup",async(req,res)=>{
                 name,address,state,pincode,email,adminPassword: hashedPassword
             })
             const payload={
-                college:{
-                    _id: newCollege._id,
-                    name: newCollege.name
+                user:{
+                    id: newCollege._id,
+                    name: newCollege.name,
+                    type:"college"
                 }
             }
             const authtoken=JWT.sign(payload,JWT_SECRET);
@@ -481,9 +482,9 @@ router.post("/signup",async(req,res)=>{
             })
             const payload={
                 user:{
-                    _id:newUser._id,
+                    id:newUser._id,
                     name:newUser.name,
-                    collegeId: userCollege._id
+                    type:"alumni"
                 }
             }
             const authtoken=JWT.sign(payload,JWT_SECRET);
@@ -512,9 +513,10 @@ router.post("/signin",async(req,res)=>{
                 return res.status(400).json({success: false,message:"Invalid password"});
             }
             const payload={
-                college:{
-                    _id: college._id,
-                    name: college.name
+                user:{
+                    id: college._id,
+                    name: college.name,
+                    type:"college"
                 }
             }
             const authtoken=JWT.sign(payload,JWT_SECRET);
@@ -531,9 +533,9 @@ router.post("/signin",async(req,res)=>{
             }
             const payload={
                 user:{
-                    _id:user._id,
+                    id:user._id,
                     name:user.name,
-                    collegeId: user.college._id
+                    type:"alumni"
                 }
             }
             const authtoken=JWT.sign(payload,JWT_SECRET);
